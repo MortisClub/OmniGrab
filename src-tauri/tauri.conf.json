@@ -49,8 +49,8 @@
         "displayLanguageSelector": false
       },
       "wix": {
-        "bannerImage": "bundle/wix-banner.bmp",
-        "dialogImage": "bundle/wix-dialog.bmp"
+        "bannerPath": "bundle/wix-banner.bmp",
+        "dialogImagePath": "bundle/wix-dialog.bmp"
       }
     },
     "macOS": {
