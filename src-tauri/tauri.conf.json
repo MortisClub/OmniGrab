@@ -39,6 +39,28 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "windows": {
+      "nsis": {
+        "installerIcon": "icons/icon.ico",
+        "headerImage": "bundle/nsis-header.bmp",
+        "sidebarImage": "bundle/nsis-sidebar.bmp",
+        "licenseFile": "../LICENSE",
+        "languages": ["English"],
+        "displayLanguageSelector": false
+      },
+      "wix": {
+        "bannerImage": "bundle/wix-banner.bmp",
+        "dialogImage": "bundle/wix-dialog.bmp"
+      }
+    },
+    "macOS": {
+      "dmg": {
+        "background": "bundle/dmg-background.png",
+        "windowSize": { "width": 660, "height": 400 },
+        "appPosition": { "x": 180, "y": 200 },
+        "applicationFolderPosition": { "x": 480, "y": 200 }
+      }
+    }
   }
 }
