@@ -11,6 +11,14 @@
 
 <p align="center">Fast, minimal desktop app for downloading video and audio. Paste a link, hit Download, done.</p>
 
+## Screenshots
+
+<p align="center">
+  <img src="screens/main.png" width="800" alt="OmniGrab main window">
+  <img src="screens/card.png" width="800" alt="Video preview with quality presets">
+  <img src="screens/download.png" width="800" alt="Active download with live progress">
+</p>
+
 ## Features
 
 - Paste a link, get title, thumbnail and available formats in a second

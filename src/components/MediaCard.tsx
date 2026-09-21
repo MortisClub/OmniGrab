@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { ChevronDown, Clock, Download, User } from "lucide-react";
 import type { FormatInfo, MediaInfo, Preset } from "@/lib/types";
@@ -64,6 +64,18 @@ export function MediaCard({
     }
     onDownload(preset, preset, preset === "mp3" ? null : "mp4");
   };
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+        e.preventDefault();
+        if (!busy) pick();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [preset, vid, aud, busy]);
 
   const pill = (id: Preset, label: string, hint: string, enabled: boolean) => (
     <button
