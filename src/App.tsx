@@ -6,6 +6,7 @@ import { AnimatePresence } from "framer-motion";
 import { AlertCircle, FolderOpen } from "lucide-react";
 import { api } from "@/lib/ipc";
 import { isUrl } from "@/lib/format";
+import { version as appVersion } from "../package.json";
 import type {
   DownloadItem,
   FailedPayload,
@@ -258,7 +259,7 @@ export default function App() {
           <span className="truncate">{settings.saveDir ?? "…"}</span>
         </button>
         <span className="ml-auto shrink-0 tabular-nums">Downloads: {doneCount}</span>
-        <span className="shrink-0 tabular-nums">v0.1.0</span>
+        <span className="shrink-0 tabular-nums">v{appVersion}</span>
       </div>
 
       <SettingsModal open={settingsOpen} onClose={() => setSettingsOpen(false)} />
