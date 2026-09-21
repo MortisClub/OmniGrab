@@ -45,7 +45,6 @@
         "installerIcon": "icons/icon.ico",
         "headerImage": "bundle/nsis-header.bmp",
         "sidebarImage": "bundle/nsis-sidebar.bmp",
-        "licenseFile": "../LICENSE",
         "languages": ["English"],
         "displayLanguageSelector": false
       },
