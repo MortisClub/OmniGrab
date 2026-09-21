@@ -1,6 +1,6 @@
 [package]
 name = "omnigrab"
-version = "0.1.4"
+version = "0.1.5"
 description = "Fast, minimal video and audio downloader"
 edition = "2021"
 
@@ -26,5 +26,7 @@ tar = "0.4"
 xz2 = "0.1"
 dirs = "5"
 notify-rust = { version = "4", default-features = false, features = ["z"] }
-arboard = "3"
 futures-util = "0.3"
+
+[target.'cfg(not(target_os = "android"))'.dependencies]
+arboard = "3"
