@@ -1,6 +1,6 @@
 [package]
 name = "omnigrab"
-version = "0.1.6"
+version = "0.1.7"
 description = "Fast, minimal video and audio downloader"
 edition = "2021"
 
