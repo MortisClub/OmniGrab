@@ -5,14 +5,17 @@ mod ytdlp;
 
 use std::sync::Arc;
 
+use tauri::Manager;
+#[cfg(desktop)]
 use tauri::{
     menu::{Menu, MenuItem},
     tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
-    AppHandle, Manager,
+    AppHandle,
 };
 
 use ytdlp::download::DownloadManager;
 
+#[cfg(desktop)]
 fn show_main(app: &AppHandle) {
     if let Some(w) = app.get_webview_window("main") {
         let _ = w.show();
@@ -21,11 +24,13 @@ fn show_main(app: &AppHandle) {
     }
 }
 
+#[cfg(desktop)]
 fn looks_like_url(s: &str) -> bool {
     let t = s.trim();
     t.starts_with("http://") || t.starts_with("https://")
 }
 
+#[cfg(desktop)]
 async fn quick_download(app: AppHandle) {
     let text = match arboard::Clipboard::new().and_then(|mut c| c.get_text()) {
         Ok(t) => t,
@@ -47,6 +52,7 @@ async fn quick_download(app: AppHandle) {
     let _ = mgr.start(app, req).await;
 }
 
+#[cfg(desktop)]
 fn tray(app: &tauri::App) -> tauri::Result<()> {
     let show = MenuItem::with_id(app, "show", "Show OmniGrab", true, None::<&str>)?;
     let paste = MenuItem::with_id(app, "paste", "Download from clipboard", true, None::<&str>)?;
@@ -105,6 +111,7 @@ pub fn run() {
             tauri::async_runtime::spawn(async move {
                 let _ = ytdlp::binary::ensure_ytdlp(&h, true).await;
             });
+            #[cfg(desktop)]
             tray(app)?;
             Ok(())
         })
