@@ -49,9 +49,9 @@ export function URLInput({
           )
         )}
       </div>
-      <Button onClick={onPaste} variant="secondary" className="h-11 px-4">
+      <Button onClick={onPaste} variant="secondary" className="h-11 shrink-0 px-3 sm:px-4">
         <ClipboardPaste size={16} />
-        Paste
+        <span className="hidden min-[420px]:inline">Paste</span>
       </Button>
     </div>
   );

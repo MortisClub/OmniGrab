@@ -4,6 +4,8 @@ import { api } from "@/lib/ipc";
 interface SettingsState {
   saveDir: string | null;
   proxy: string;
+  cookiesBrowser: string;
+  lastPreset: string;
   theme: "dark" | "light";
   autoUpdate: boolean;
   ytdlpVersion: string | null;
@@ -12,6 +14,8 @@ interface SettingsState {
   init: () => Promise<void>;
   setSaveDir: (dir: string) => void;
   setProxy: (proxy: string) => void;
+  setCookiesBrowser: (b: string) => void;
+  setLastPreset: (p: string) => void;
   setTheme: (theme: "dark" | "light") => void;
   setAutoUpdate: (v: boolean) => void;
   refreshVersion: () => Promise<void>;
@@ -32,6 +36,8 @@ function save(s: SettingsState) {
     JSON.stringify({
       saveDir: s.saveDir,
       proxy: s.proxy,
+      cookiesBrowser: s.cookiesBrowser,
+      lastPreset: s.lastPreset,
       theme: s.theme,
       autoUpdate: s.autoUpdate,
     }),
@@ -41,6 +47,8 @@ function save(s: SettingsState) {
 export const useSettings = create<SettingsState>((set, get) => ({
   saveDir: null,
   proxy: "",
+  cookiesBrowser: "",
+  lastPreset: "1080",
   theme: "dark",
   autoUpdate: true,
   ytdlpVersion: null,
@@ -70,6 +78,14 @@ export const useSettings = create<SettingsState>((set, get) => ({
   },
   setProxy: (proxy) => {
     set({ proxy });
+    save(get());
+  },
+  setCookiesBrowser: (cookiesBrowser) => {
+    set({ cookiesBrowser });
+    save(get());
+  },
+  setLastPreset: (lastPreset) => {
+    set({ lastPreset });
     save(get());
   },
   setTheme: (theme) => {

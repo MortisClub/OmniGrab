@@ -11,8 +11,9 @@ pub async fn fetch_metadata(
     app: AppHandle,
     url: String,
     proxy: Option<String>,
+    cookies: Option<String>,
 ) -> Result<MediaInfo> {
-    metadata::fetch(&app, url.trim(), proxy.as_deref()).await
+    metadata::fetch(&app, url.trim(), proxy.as_deref(), cookies.as_deref()).await
 }
 
 #[tauri::command]

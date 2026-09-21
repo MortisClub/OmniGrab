@@ -42,6 +42,27 @@ export function SettingsModal({ open, onClose }: { open: boolean; onClose: () =>
           />
         </div>
 
+        <div>
+          <label className="mb-1.5 block text-[12px] font-medium text-muted-foreground">
+            Browser cookies (for age-restricted videos)
+          </label>
+          <select
+            value={s.cookiesBrowser}
+            onChange={(e) => s.setCookiesBrowser(e.target.value)}
+            className="h-10 w-full rounded-xl border border-input bg-transparent px-2 text-sm text-foreground focus:border-[#6366F1] focus:outline-none"
+          >
+            <option value="" className="bg-popover">Disabled</option>
+            {["chrome", "brave", "edge", "firefox", "opera", "vivaldi", "chromium", "safari"].map((b) => (
+              <option key={b} value={b} className="bg-popover">
+                {b[0].toUpperCase() + b.slice(1)}
+              </option>
+            ))}
+          </select>
+          <p className="mt-1 text-[12px] text-muted-foreground">
+            Reads cookies from the browser so private videos can load. Close the browser first or the read may fail.
+          </p>
+        </div>
+
         <div className="flex items-center justify-between rounded-xl border border-border p-3">
           <span className="inline-flex items-center gap-2 text-sm text-foreground">
             {s.theme === "light" ? <Sun size={15} /> : <Moon size={15} />}

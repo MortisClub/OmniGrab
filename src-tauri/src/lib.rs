@@ -45,6 +45,7 @@ async fn quick_download(app: AppHandle) {
         format: "best".into(),
         merge_ext: Some("mp4".into()),
         proxy: None,
+        cookies_from: None,
         title: None,
         save_dir,
     };
@@ -114,6 +115,14 @@ pub fn run() {
             #[cfg(desktop)]
             tray(app)?;
             Ok(())
+        })
+        .on_window_event(|w, e| {
+            if w.label() == "main" {
+                if let tauri::WindowEvent::CloseRequested { api, .. } = e {
+                    let _ = w.hide();
+                    api.prevent_close();
+                }
+            }
         })
         .run(tauri::generate_context!())
         .expect("omnigrab failed to start");

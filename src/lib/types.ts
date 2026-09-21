@@ -28,6 +28,7 @@ export interface DownloadRequest {
   format: string;
   mergeExt: string | null;
   proxy: string | null;
+  cookiesFrom: string | null;
   title: string | null;
   saveDir: string;
 }

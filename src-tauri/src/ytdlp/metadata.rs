@@ -47,7 +47,12 @@ struct RawFormat {
     url: Option<String>,
 }
 
-pub async fn fetch(app: &AppHandle, url: &str, proxy: Option<&str>) -> Result<MediaInfo> {
+pub async fn fetch(
+    app: &AppHandle,
+    url: &str,
+    proxy: Option<&str>,
+    cookies: Option<&str>,
+) -> Result<MediaInfo> {
     let bin = binary::ensure_ytdlp(app, false).await?;
 
     let mut cmd = tokio::process::Command::new(&bin);
@@ -60,6 +65,9 @@ pub async fn fetch(app: &AppHandle, url: &str, proxy: Option<&str>) -> Result<Me
     ]);
     if let Some(p) = proxy.map(str::trim).filter(|p| !p.is_empty()) {
         cmd.args(["--proxy", p]);
+    }
+    if let Some(c) = cookies.map(str::trim).filter(|c| !c.is_empty()) {
+        cmd.args(["--cookies-from-browser", c]);
     }
     cmd.arg(url);
 

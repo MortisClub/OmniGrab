@@ -34,6 +34,7 @@ pub struct DownloadRequest {
     pub format: String,
     pub merge_ext: Option<String>,
     pub proxy: Option<String>,
+    pub cookies_from: Option<String>,
     pub title: Option<String>,
     pub save_dir: String,
 }

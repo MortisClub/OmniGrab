@@ -140,6 +140,15 @@ fn build_args(req: &DownloadRequest, ffdir: Option<&std::path::Path>) -> Vec<Str
         a.push("--proxy".into());
         a.push(p.into());
     }
+    if let Some(c) = req
+        .cookies_from
+        .as_deref()
+        .map(str::trim)
+        .filter(|c| !c.is_empty())
+    {
+        a.push("--cookies-from-browser".into());
+        a.push(c.into());
+    }
     if let Some(d) = ffdir {
         a.push("--ffmpeg-location".into());
         a.push(d.to_string_lossy().into_owned());

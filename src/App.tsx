@@ -6,6 +6,7 @@ import { AnimatePresence } from "framer-motion";
 import { AlertCircle, FolderOpen } from "lucide-react";
 import { api } from "@/lib/ipc";
 import { isUrl } from "@/lib/format";
+import { loadHistory, saveHistory } from "@/lib/history";
 import { version as appVersion } from "../package.json";
 import type {
   DownloadItem,
@@ -40,7 +41,10 @@ export default function App() {
 
   useEffect(() => {
     settings.init();
+    for (const h of loadHistory()) useDownloads.getState().upsert(h);
   }, []);
+
+  const persist = () => saveHistory(useDownloads.getState().items);
 
   useEffect(() => {
     const offs: (() => void)[] = [];
@@ -61,15 +65,18 @@ export default function App() {
         eta: null,
         outPath: e.payload.path,
       });
+      persist();
     }).then((f) => offs.push(f));
     listen<FailedPayload>("download-failed", (e) => {
       useDownloads.getState().patchByRemoteId(e.payload.id, {
         status: "error",
         error: e.payload.error,
       });
+      persist();
     }).then((f) => offs.push(f));
     listen<{ id: string }>("download-cancelled", (e) => {
       useDownloads.getState().patchByRemoteId(e.payload.id, { status: "cancelled" });
+      persist();
     }).then((f) => offs.push(f));
     return () => offs.forEach((f) => f());
   }, []);
@@ -82,7 +89,11 @@ export default function App() {
       setFetching(true);
       setFetchError(null);
       try {
-        const info = await api.fetchMetadata(clean, settings.proxy || null);
+        const info = await api.fetchMetadata(
+          clean,
+          settings.proxy || null,
+          settings.cookiesBrowser || null,
+        );
         setMedia(info);
       } catch (e) {
         setMedia(null);
@@ -91,7 +102,7 @@ export default function App() {
         setFetching(false);
       }
     },
-    [settings.proxy],
+    [settings.proxy, settings.cookiesBrowser],
   );
 
   useEffect(() => {
@@ -157,6 +168,7 @@ export default function App() {
         format,
         mergeExt,
         proxy: settings.proxy || null,
+        cookiesFrom: settings.cookiesBrowser || null,
         title: media?.title ?? null,
         saveDir,
       });
@@ -189,6 +201,7 @@ export default function App() {
         format: item.preset,
         mergeExt: "mp4",
         proxy: settings.proxy || null,
+        cookiesFrom: settings.cookiesBrowser || null,
         title: item.title,
         saveDir,
       });
@@ -208,7 +221,7 @@ export default function App() {
     <div className="app-shell flex h-full flex-col overflow-hidden rounded-xl border border-border">
       <TitleBar onSettings={() => setSettingsOpen(true)} />
 
-      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto p-4">
+      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto p-3 sm:p-4">
         <URLInput
           value={url}
           onChange={setUrl}
@@ -236,12 +249,18 @@ export default function App() {
         <DownloadQueue
           items={items}
           onRetry={retry}
-          onRemove={(id) => useDownloads.getState().remove(id)}
-          onClearFinished={() => useDownloads.getState().clearFinished()}
+          onRemove={(id) => {
+            useDownloads.getState().remove(id);
+            persist();
+          }}
+          onClearFinished={() => {
+            useDownloads.getState().clearFinished();
+            persist();
+          }}
         />
 
         {items.length > 0 && (
-          <div className="flex items-center justify-center gap-4 pb-1 pt-2">
+          <div className="flex flex-wrap items-center justify-center gap-4 pb-1 pt-2">
             {BRANDS.map((b) => (
               <BrandIcon key={b} brand={b} size={22} />
             ))}
@@ -249,7 +268,7 @@ export default function App() {
         )}
       </div>
 
-      <div className="flex h-9 shrink-0 items-center gap-2 border-t border-border px-3 text-[12px] text-muted-foreground">
+      <div className="flex h-9 shrink-0 items-center gap-x-3 gap-y-0.5 border-t border-border px-3 text-[12px] text-muted-foreground">
         <button
           onClick={() => settings.saveDir && api.openFileLocation(settings.saveDir).catch(() => {})}
           className="btn-press inline-flex min-w-0 items-center gap-1.5 hover:text-foreground"
@@ -259,7 +278,7 @@ export default function App() {
           <span className="truncate">{settings.saveDir ?? "…"}</span>
         </button>
         <span className="ml-auto shrink-0 tabular-nums">Downloads: {doneCount}</span>
-        <span className="shrink-0 tabular-nums">v{appVersion}</span>
+        <span className="hidden shrink-0 tabular-nums min-[420px]:block">v{appVersion}</span>
       </div>
 
       <SettingsModal open={settingsOpen} onClose={() => setSettingsOpen(false)} />

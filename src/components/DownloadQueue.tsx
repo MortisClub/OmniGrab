@@ -86,7 +86,7 @@ function Row({
           {(live || item.status === "queued") && (
             <div className="mt-2">
               <Progress value={item.percent} />
-              <div className="mt-1.5 flex items-center justify-between text-[12px] text-muted-foreground">
+              <div className="mt-1.5 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-[12px] text-muted-foreground">
                 <span className="tabular-nums">{item.percent.toFixed(1)}%</span>
                 <span className="tabular-nums">
                   {item.status === "processing"

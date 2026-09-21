@@ -7,7 +7,7 @@ export function TitleBar({ onSettings }: { onSettings: () => void }) {
   return (
     <div
       data-tauri-drag-region
-      className="flex h-11 shrink-0 items-center gap-2 border-b border-border px-3"
+      className="flex h-11 shrink-0 items-center gap-1 border-b border-border px-2 sm:gap-2 sm:px-3"
     >
       <div className="flex items-center gap-1.5 pl-1" data-tauri-drag-region>
         <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
@@ -20,7 +20,7 @@ export function TitleBar({ onSettings }: { onSettings: () => void }) {
         className="flex flex-1 items-center justify-center gap-2"
       >
         <img src="/icon.png" alt="" className="h-5 w-5 rounded" draggable={false} />
-        <span className="bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] bg-clip-text text-[13px] font-bold text-transparent">
+        <span className="hidden bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] bg-clip-text text-[13px] font-bold text-transparent min-[420px]:block">
           OmniGrab
         </span>
       </div>

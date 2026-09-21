@@ -4,6 +4,7 @@ import { ChevronDown, Clock, Download, User } from "lucide-react";
 import type { FormatInfo, MediaInfo, Preset } from "@/lib/types";
 import { formatDuration, formatSize } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import { useSettings } from "@/stores/settings";
 import { Button } from "./ui/button";
 
 function videos(fmts: FormatInfo[]) {
@@ -31,7 +32,13 @@ export function MediaCard({
   onDownload: (preset: Preset, format: string, mergeExt: string | null) => void;
   busy: boolean;
 }) {
-  const [preset, setPreset] = useState<Preset>("1080");
+  const lastPreset = useSettings((s) => s.lastPreset);
+  const remember = useSettings((s) => s.setLastPreset);
+  const initial: Preset =
+    lastPreset === "4k" || lastPreset === "1080" || lastPreset === "mp3" || lastPreset === "custom"
+      ? lastPreset
+      : "1080";
+  const [preset, setPreset] = useState<Preset>(initial);
   const [advanced, setAdvanced] = useState(false);
   const [vid, setVid] = useState("");
   const [aud, setAud] = useState("");
@@ -64,6 +71,10 @@ export function MediaCard({
     }
     onDownload(preset, preset, preset === "mp3" ? null : "mp4");
   };
+
+  useEffect(() => {
+    remember(preset);
+  }, [preset, remember]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -103,14 +114,14 @@ export function MediaCard({
       animate={{ opacity: 1, y: 0 }}
       className="card-hover rounded-2xl border border-border bg-card p-4"
     >
-      <div className="flex gap-3.5">
+      <div className="flex flex-col gap-3.5 min-[560px]:flex-row">
         {media.thumbnail && (
           <img
             src={media.thumbnail}
             alt=""
             referrerPolicy="no-referrer"
             draggable={false}
-            className="h-[86px] w-[136px] shrink-0 rounded-xl border border-border object-cover"
+            className="h-40 w-full shrink-0 rounded-xl border border-border object-cover min-[560px]:h-[86px] min-[560px]:w-[136px]"
           />
         )}
         <div className="min-w-0 flex-1">

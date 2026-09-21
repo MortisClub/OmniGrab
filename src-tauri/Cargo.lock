@@ -2624,7 +2624,7 @@ dependencies = [
 
 [[package]]
 name = "omnigrab"
-version = "0.1.0"
+version = "0.1.3"
 dependencies = [
  "arboard",
  "dirs 5.0.1",

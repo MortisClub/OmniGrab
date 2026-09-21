@@ -2,7 +2,6 @@ import { ReactNode, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 export function Dialog({
   open,
@@ -35,10 +34,8 @@ export function Dialog({
           onMouseDown={onClose}
         >
           <motion.div
-            className={cn(
-              "w-full rounded-2xl border border-border bg-popover p-5 shadow-2xl",
-              wide ? "max-w-lg" : "max-w-md",
-            )}
+            className="w-full rounded-2xl border border-border bg-popover p-5 shadow-2xl"
+            style={{ maxWidth: wide ? "32rem" : "28rem" }}
             initial={{ opacity: 0, scale: 0.96, y: 8 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 8 }}

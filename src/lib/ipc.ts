@@ -6,8 +6,8 @@ interface Started {
 }
 
 export const api = {
-  fetchMetadata: (url: string, proxy: string | null) =>
-    invoke<MediaInfo>("fetch_metadata", { url, proxy }),
+  fetchMetadata: (url: string, proxy: string | null, cookies: string | null) =>
+    invoke<MediaInfo>("fetch_metadata", { url, proxy, cookies }),
   startDownload: (request: DownloadRequest) =>
     invoke<Started>("start_download", { request }),
   cancelDownload: (id: string) => invoke<boolean>("cancel_download", { id }),
